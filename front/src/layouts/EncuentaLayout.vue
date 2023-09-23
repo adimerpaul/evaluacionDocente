@@ -1,21 +1,23 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
+    <q-header class="bg-white">
       <q-toolbar>
-        <q-btn
-          flat
-          dense
-          round
-          icon="menu"
-          aria-label="Menu"
-          @click="toggleLeftDrawer"
-        />
-
         <q-toolbar-title>
-          Quasar App
+          <q-avatar>
+            <img src="uto.png" />
+          </q-avatar>
         </q-toolbar-title>
-
-        <div>Quasar v{{ $q.version }}</div>
+        <div>
+          <q-btn
+            flat
+            dense
+            color="primary"
+            round
+            icon="menu"
+            aria-label="Menu"
+            @click="leftDrawerOpen = !leftDrawerOpen"
+          />
+        </div>
       </q-toolbar>
     </q-header>
     <q-page-container>

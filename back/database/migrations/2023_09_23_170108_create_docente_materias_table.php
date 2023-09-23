@@ -17,7 +17,8 @@ return new class extends Migration
             $table->foreignId('materia_id')->constrained('materias');
             $table->string('paralelo')->nullable();
             $table->string('gestion')->nullable();
-            $table->string('codigo')->nullable();
+            $table->string('codigo')->nullable()->default('CODIGO');
+            $table->string('activo')->nullable()->default('ACTIVO');
             $table->timestamps();
         });
     }
