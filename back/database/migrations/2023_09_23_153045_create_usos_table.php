@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('usos', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->unsignedBigInteger('conocimiento_id');
+            $table->foreign('conocimiento_id')->references('id')->on('conocimientos');
             $table->timestamps();
         });
     }
