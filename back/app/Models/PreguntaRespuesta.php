@@ -11,6 +11,6 @@ class PreguntaRespuesta extends Model
     protected $fillable = ['name', 'pregunta_id'];
     public function pregunta()
     {
-        return $this->belongsTo(Pregunta::class);
+        return $this->belongsTo(Pregunta::class, 'pregunta_id');
     }
 }

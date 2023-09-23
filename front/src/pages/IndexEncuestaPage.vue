@@ -9,11 +9,14 @@
           <q-img src="LOGO_INF.png" width="100px" />
         </div>
       </div>
-      <div class="pacifico">Sistema de Evaluación Docentes</div>
+      <div class="text-h3 q-pa-md pacifico">Sistema de Evaluación Docentes</div>
       <q-img src="avatar.png" width="300px" />
       <q-card style="width: 300px; margin: 0 auto; position: relative; z-index: 1;" flat bordered>
         <q-card-section class="bg-primary">
-          <q-btn color="white" size="18px" text-color="primary" label="Realizar Evaluacion" no no-caps icon-right="login" />
+          <q-btn color="white" size="18px" text-color="primary" push
+                 label="Realizar Evaluacion" no no-caps icon-right="login"
+                 @click="realizarEvaluacion" :loading="loading"
+          />
         </q-card-section>
       </q-card>
       <div class="bg-primary flex flex-center text-white" style="position: absolute; bottom: 0; width: 100%; height: 50px;">
@@ -29,14 +32,41 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-
+import { useQuasar } from 'quasar'
+import { api } from 'boot/axios'
 export default defineComponent({
   name: 'IndexEncuestaPage',
   setup () {
-    // const meta = ref<Meta>({
-    //   totalCount: 1200
-    // })
-    // return { todos, meta }
+    const $q = useQuasar()
+    const loading = ref(false)
+    const realizarEvaluacion = () => {
+      $q.dialog({
+        title: 'Realizar Evaluacion',
+        message: 'Ingrese su codigo de evaluacion',
+        prompt: {
+          model: '',
+          type: 'text',
+          maxlength: 5,
+          outlined: true
+        },
+        cancel: true,
+        persistent: true
+      }).onOk((data) => {
+        loading.value = true
+        api.post('search', { search: data }).then((res) => {
+          console.log(res.data)
+        }).catch((err) => {
+          $q.notify({
+            color: 'negative',
+            message: err.response.data.message,
+            position: 'top'
+          })
+        }).finally(() => {
+          loading.value = false
+        })
+      })
+    }
+    return { realizarEvaluacion, loading }
   }
 })
 </script>
