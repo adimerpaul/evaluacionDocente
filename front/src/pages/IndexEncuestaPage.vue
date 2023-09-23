@@ -19,13 +19,8 @@
           />
         </q-card-section>
       </q-card>
-      <div class="bg-primary flex flex-center text-white" style="position: absolute; bottom: 0; width: 100%; height: 50px;">
-        <div style="line-height: 1.5; font-size: 12px;">
-          @2023 Facultad de Ingenieria de Sistemas e Informatica <br>
-          Todos los derechos reservados <br>
-<!--          <a href="https://www.unmsm.edu.pe/" target="_blank">UNMSM</a>-->
-        </div>
-      </div>
+<!--      <div class="bg-primary flex flex-center text-white" style="position: absolute; bottom: 0; width: 100%; height: 50px;">-->
+<!--      </div>-->
     </div>
   </q-page>
 </template>
@@ -33,12 +28,14 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import { useQuasar } from 'quasar'
-import { api } from 'boot/axios'
+import { api, Alert, store } from 'boot/axios'
+import { useRouter } from 'vue-router'
 export default defineComponent({
   name: 'IndexEncuestaPage',
   setup () {
     const $q = useQuasar()
     const loading = ref(false)
+    const router = useRouter()
     const realizarEvaluacion = () => {
       $q.dialog({
         title: 'Realizar Evaluacion',
@@ -54,13 +51,11 @@ export default defineComponent({
       }).onOk((data) => {
         loading.value = true
         api.post('search', { search: data }).then((res) => {
-          console.log(res.data)
+          store.conocimientos = res.data.conocimientos
+          store.asignacion = res.data.asignacion
+          router.push('/evaluacion')
         }).catch((err) => {
-          $q.notify({
-            color: 'negative',
-            message: err.response.data.message,
-            position: 'top'
-          })
+          Alert.error(err.response.data.message)
         }).finally(() => {
           loading.value = false
         })

@@ -15,14 +15,12 @@ declare module '@vue/runtime-core' {
 // "export default () => {}" function below (which runs individually
 // for each client)
 const api = axios.create({ baseURL: import.meta.env.VITE_API_BACK })
-
+const url = import.meta.env.VITE_API_BACK
+const store = useCounterStore()
 export default boot(({ app }) => {
   // for use inside Vue files (Options API) through this.$axios and this.$api
 
   app.config.globalProperties.$axios = axios.create({ baseURL: import.meta.env.VITE_API_BACK })
-  app.config.globalProperties.$url = import.meta.env.VITE_API_BACK
-  app.config.globalProperties.$store = useCounterStore()
-  app.config.globalProperties.$alert = Alert
   // ^ ^ ^ this will allow you to use this.$axios (for Vue Options API form)
   //       so you won't necessarily have to import axios in each vue file
 
@@ -31,4 +29,4 @@ export default boot(({ app }) => {
   //       so you can easily perform requests against your app's API
 })
 
-export { api }
+export { api, Alert, url, store }

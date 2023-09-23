@@ -3,7 +3,8 @@ import { defineStore } from 'pinia'
 export const useCounterStore = defineStore('counter', {
   state: () => ({
     counter: 0,
-    conocimientos: []
+    conocimientos: [],
+    asignacion: null
   }),
   getters: {
     doubleCount: (state) => state.counter * 2

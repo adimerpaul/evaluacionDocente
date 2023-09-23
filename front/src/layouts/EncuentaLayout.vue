@@ -23,6 +23,12 @@
     <q-page-container>
       <router-view />
     </q-page-container>
+    <q-footer>
+      <div class="text-center" style="line-height: 1.5; font-size: 12px;">
+        @2023 Facultad de Ingenieria de Sistemas e Informatica <br>
+        Todos los derechos reservados <br>
+      </div>
+    </q-footer>
   </q-layout>
 </template>
 
