@@ -15,7 +15,9 @@ const routes: RouteRecordRaw[] = [
     children: [
       { path: 'login', component: () => import('pages/Login.vue') },
       { path: 'home', component: () => import('pages/Home.vue'), meta: { requiresAuth: true } },
-      { path: 'user', component: () => import('pages/User.vue'), meta: { requiresAuth: true } }
+      { path: 'user', component: () => import('pages/User.vue'), meta: { requiresAuth: true } },
+      { path: 'docente', component: () => import('pages/Docente.vue'), meta: { requiresAuth: true } },
+      { path: 'materia', component: () => import('pages/Materia.vue'), meta: { requiresAuth: true } }
     ]
   },
   // Always leave this as last one,

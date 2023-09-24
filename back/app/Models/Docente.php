@@ -13,6 +13,7 @@ class Docente extends Model
         'email',
         'photo',
     ];
+    
     public function materias()
     {
         return $this->belongsToMany(Materia::class);

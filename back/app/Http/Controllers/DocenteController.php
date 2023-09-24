@@ -14,6 +14,7 @@ class DocenteController extends Controller
     public function index()
     {
         //
+        return Docente::all();
     }
 
     /**
@@ -30,14 +31,17 @@ class DocenteController extends Controller
     public function store(StoreDocenteRequest $request)
     {
         //
+        return Docente::create($request->all());
+
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Docente $docente)
+    public function show($shop_id)
     {
         //
+        return Docente::find($shop_id);
     }
 
     /**
@@ -54,6 +58,8 @@ class DocenteController extends Controller
     public function update(UpdateDocenteRequest $request, Docente $docente)
     {
         //
+        $docente->update($request->all());
+        return $docente;
     }
 
     /**
@@ -62,5 +68,6 @@ class DocenteController extends Controller
     public function destroy(Docente $docente)
     {
         //
+        $docente->delete();
     }
 }

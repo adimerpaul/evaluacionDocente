@@ -7,6 +7,11 @@
 </template>
 <script>
 export default {
-  name: 'HomePage'
+  name: 'HomePage',
+  mounted () {
+    if (!this.$store.isLoggedIn) {
+      this.$router.push('/login')
+    }
+  }
 }
 </script>

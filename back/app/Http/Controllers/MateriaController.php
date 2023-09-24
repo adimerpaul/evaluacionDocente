@@ -14,6 +14,7 @@ class MateriaController extends Controller
     public function index()
     {
         //
+        return Materia::all();
     }
 
     /**
@@ -30,6 +31,8 @@ class MateriaController extends Controller
     public function store(StoreMateriaRequest $request)
     {
         //
+        return Materia::create($request->all());
+
     }
 
     /**
@@ -54,6 +57,8 @@ class MateriaController extends Controller
     public function update(UpdateMateriaRequest $request, Materia $materia)
     {
         //
+        $materia->update($request->all());
+        return $materia;
     }
 
     /**
@@ -62,5 +67,6 @@ class MateriaController extends Controller
     public function destroy(Materia $materia)
     {
         //
+        $materia->delete();
     }
 }
