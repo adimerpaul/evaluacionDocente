@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Conocimiento;
 use App\Models\DocenteMateria;
+use App\Models\Pregunta;
 use Illuminate\Http\Request;
 
 class SearchEncuestaController extends Controller{
@@ -20,8 +21,8 @@ class SearchEncuestaController extends Controller{
             ->with(['docente','materia'])
             ->whereId($asignacion->id)
             ->first();
-        $conocimientos = Conocimiento::
-            with(['usos.preguntas.respuestas'])
+        $conocimientos = Pregunta::
+            with(['uso.conocimiento','respuestas'])
             ->get();
         return response()->json([
             'asignacion' => $asignacion,

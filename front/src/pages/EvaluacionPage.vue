@@ -9,7 +9,6 @@
                 :src="`${url}../../images/${store.asignacion.docente.photo}`" />
             </q-avatar>
           </q-item-section>
-
           <q-item-section>
             <q-item-label v-if="store.asignacion">{{store.asignacion.docente.name}}</q-item-label>
             <q-item-label caption v-if="store.asignacion">
@@ -25,6 +24,21 @@
         </q-item>
       </q-card-section>
     </q-card>
+    <template v-for="conocimiento in store.conocimientos" :key="conocimiento.id">
+      <q-card class="q-ma-md" flat bordered>
+        <q-card-section class="q-pa-xs text-center bg-black text-white">
+          {{conocimiento.name}}
+        </q-card-section>
+        <q-card-section>
+          <q-btn class="full-width q-ma-xs" rounded no-caps outline
+                 v-for="(respuesta, i) in conocimiento.respuestas" :key="respuesta.id"
+                 :color="i==0?'green':i==1?'orange':i==2?'red':'blue'"
+          >
+            <div class="text-black">{{respuesta.name}}</div>
+          </q-btn>
+        </q-card-section>
+      </q-card>
+    </template>
     <pre>{{store.conocimientos}}</pre>
     <div class="text-center q-pa-md">
       <q-card flat bordered>
