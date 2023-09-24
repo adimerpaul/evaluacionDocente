@@ -22,7 +22,10 @@ class User extends Authenticatable
         'email',
         'password',
     ];
-
+    
+    public function permisos(){
+        return $this->belongsToMany(Permiso::class);
+    }
     /**
      * The attributes that should be hidden for serialization.
      *
