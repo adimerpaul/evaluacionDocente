@@ -31,8 +31,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::put('/updatepermisos/{user}',[\App\Http\Controllers\UserController::class,'updatepermisos']);
     Route::resource('/permiso',\App\Http\Controllers\PermisoController::class);
 
-    Route::apiResource('docente', App\Http\Controllers\DocenteController::class);
-    Route::apiResource('materia', App\Http\Controllers\MateriaController::class);
+    Route::apiResource('/docente', App\Http\Controllers\DocenteController::class);
+    Route::apiResource('/materia', App\Http\Controllers\MateriaController::class);
 
 
 });

@@ -2,7 +2,7 @@
     <q-page class="q-pa-xs">
       <div class="row">
         <div class="col-12">
-          <q-table title="Lista de Docentes" :loading="loading" :rows-per-page-options="[0]" :columns="inventaryColumns" :rows="docentes" flat bordered dense :filter="docenteFiltar">
+          <q-table title="Lista de Docentes" :loading="loading" :rows-per-page-options="[0]" :columns="docenteColumnsColumns" :rows="docentes" flat bordered dense :filter="docenteFiltar">
             <template v-slot:header-cell="props">
               <q-th :props="props" class="bg-primary text-white text-center">
                 {{ props.col.label }}
@@ -77,7 +77,7 @@
                   />
                 </div>
                 <div class="col-12 col-md-12 text-center q-pt-xs">
-                  <q-btn :loading="loading" color="primary" label="Guardar" type="submit" no-caps icon="o_save" class="full-width"  />
+                  <q-btn :loading="loading" color="primary" label="Guardar" type="submit" no-caps icon="save" class="full-width"  />
                 </div>
               </div>
             </q-form>
@@ -93,12 +93,9 @@ export default {
   data () {
     return {
       store: globalStore(),
-      inventarieDialog: false,
-      docenteStatus: 'Crear',
+      docenteStatus: 'create',
       loading: false,
-      inventaries: [],
       docenteShow: false,
-      shop_id: this.$route.params.id,
       docentes: [],
       docente: {
         name: '',
@@ -107,12 +104,6 @@ export default {
       },
       users: [],
       docenteFiltar: '',
-      inventaryColumns: [
-        { name: 'opcion', label: 'Opcion', field: 'opcion', align: 'left', sortable: false },
-        { name: 'name', label: 'Nombre', field: 'name', align: 'left', sortable: true },
-        { name: 'email', label: 'Email', field: 'email', align: 'left', sortable: true },
-        { name: 'photo', label: 'Foto', field: 'photo', align: 'left', sortable: true }
-      ],
       docenteColumns: [
         { name: 'opcion', label: 'Opcion', field: 'opcion', align: 'left', sortable: false },
         { name: 'name', label: 'Nombre', field: 'name', align: 'left', sortable: true },
@@ -138,8 +129,8 @@ export default {
     },
     docenteDelete (docente) {
       this.$q.dialog({
-        title: 'Eliminar Categoria',
-        message: '¿Estas seguro de eliminar esta categoria?',
+        title: 'Eliminar Docente',
+        message: '¿Estas seguro de eliminar esta Docente?',
         cancel: true,
         persistent: true
       }).onOk(() => {
@@ -195,28 +186,7 @@ export default {
         }
       }
     },
-    deletedocente (docente) {
-      this.$q.dialog({
-        title: 'Eliminar',
-        message: '¿Estas seguro de eliminar esta categoria?',
-        cancel: true,
-        persistent: true
-      }).onOk(() => {
-        this.$q.loading.show()
-        this.$api.delete('docente/' + docente.id).then(() => {
-          this.docentesGet()
-        }).finally(() => {
-          this.$q.loading.hide()
-        }).catch(() => {
-          this.$q.notify({
-            message: 'No se puede eliminar esta docente porque tiene activos asociados',
-            color: 'negative',
-            icon: 'warning',
-            position: 'top'
-          })
-        })
-      })
-    },
+
     docenteCreate () {
       this.docenteStatus = 'create'
       this.docente = {
@@ -228,7 +198,6 @@ export default {
     },
     docenteSubmit () {
       this.$q.loading.show()
-      this.docente.shop_id = this.shop_id
       if (this.docenteStatus === 'create') {
         this.$api.post('docente', this.docente).then(() => {
           this.docentesGet()
