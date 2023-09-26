@@ -58,6 +58,7 @@ class MateriaController extends Controller
     public function update(UpdateMateriaRequest $request, Materia $materia)
     {
         //
+        $materia=Materia::find($request->id);
         $materia->update($request->all());
         return $materia;
     }
@@ -65,9 +66,10 @@ class MateriaController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Materia $materia)
+    public function destroy($id)
     {
         //
+        $materia=Materia::find($id);
         $materia->delete();
     }
 }

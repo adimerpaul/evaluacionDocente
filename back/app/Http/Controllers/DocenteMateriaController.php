@@ -14,6 +14,7 @@ class DocenteMateriaController extends Controller
     public function index()
     {
         //
+        return DocenteMateria::with('docente')->with('materia')->get();
     }
 
     /**
@@ -30,6 +31,15 @@ class DocenteMateriaController extends Controller
     public function store(StoredocenteMateriaRequest $request)
     {
         //
+        if(DocenteMateria::where('docente_id',$request->docente_id)->where('materia_id',$request->materia_id)->where('gestion',$request->gestion)->where('paralelo',$request->paralelo)->count()>0)
+            return false;
+
+        $docenteMateria=new DocenteMateria;
+        $docenteMateria->docente_id=$request->docente_id;
+        $docenteMateria->materia_id=$request->materia_id;
+        $docenteMateria->paralelo=$request->paralelo;
+        $docenteMateria->gestion=$request->gestion;
+        $docenteMateria->save();
     }
 
     /**

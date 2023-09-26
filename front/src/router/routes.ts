@@ -17,7 +17,8 @@ const routes: RouteRecordRaw[] = [
       { path: 'home', component: () => import('pages/Home.vue'), meta: { requiresAuth: true } },
       { path: 'user', component: () => import('pages/User.vue'), meta: { requiresAuth: true } },
       { path: 'docente', component: () => import('pages/Docente.vue'), meta: { requiresAuth: true } },
-      { path: 'materia', component: () => import('pages/Materia.vue'), meta: { requiresAuth: true } }
+      { path: 'materia', component: () => import('pages/Materia.vue'), meta: { requiresAuth: true } },
+      { path: 'asignar', component: () => import('pages/Asignar.vue'), meta: { requiresAuth: true } }
     ]
   },
   // Always leave this as last one,
