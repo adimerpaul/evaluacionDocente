@@ -224,7 +224,7 @@ class DocenteSeeder extends Seeder
 //fernando.urena@sistemas.edu.bo
 //JEFE GAB. COMPUTACION - LAB 1280
 //REDES INFORMÁTICAS I - INF 3510
-//COMUNICACION INALAMBRICA - INF 3632
+//COMUNICACION INALAMBRICA - INF 38222
 //DISEÑO DE COMPILADORES - INF 3631
 //INVESTIGACIÓN OPERATIVA I - SIS 2510
 //INVESTIGACIÓN OPERATIVA II - SIS 2610
@@ -420,7 +420,7 @@ class DocenteSeeder extends Seeder
         $docente = Docente::create(['name' => 'UREÑA MÉRIDA GREGORIO FERNANDO','photo' => 'd20.jpg']);
         $materia1 = Materia::where('name', 'JEFE GAB. COMPUTACION')->first()? Materia::where('name', 'JEFE GAB. COMPUTACION')->first() : Materia::create(['name' => 'JEFE GAB. COMPUTACION','sigla' => 'LAB 1280']);
         $materia2 = Materia::where('name', 'REDES INFORMÁTICAS I')->first()? Materia::where('name', 'REDES INFORMÁTICAS I')->first() : Materia::create(['name' => 'REDES INFORMÁTICAS I','sigla' => 'INF 3510']);
-        $materia3 = Materia::where('name', 'COMUNICACION INALAMBRICA')->first()? Materia::where('name', 'COMUNICACION INALAMBRICA')->first() : Materia::create(['name' => 'COMUNICACION INALAMBRICA','sigla' => 'INF 3633']);
+        $materia3 = Materia::where('name', 'COMUNICACION INALAMBRICA')->first()? Materia::where('name', 'COMUNICACION INALAMBRICA')->first() : Materia::create(['name' => 'COMUNICACION INALAMBRICA','sigla' => 'INF 3822']);
         $materia4 = Materia::where('name', 'DISEÑO DE COMPILADORES')->first()? Materia::where('name', 'DISEÑO DE COMPILADORES')->first() : Materia::create(['name' => 'DISEÑO DE COMPILADORES','sigla' => 'INF 3631']);
         $materia5 = Materia::where('name', 'INVESTIGACIÓN OPERATIVA I')->first()? Materia::where('name', 'INVESTIGACIÓN OPERATIVA I')->first() : Materia::create(['name' => 'INVESTIGACIÓN OPERATIVA I','sigla' => 'SIS 2510']);
         $materia6 = Materia::where('name', 'INVESTIGACIÓN OPERATIVA II')->first()? Materia::where('name', 'INVESTIGACIÓN OPERATIVA II')->first() : Materia::create(['name' => 'INVESTIGACIÓN OPERATIVA II','sigla' => 'SIS 2610']);

@@ -2,7 +2,7 @@
     <q-page class="q-pa-xs">
       <div class="row">
         <div class="col-12">
-          <q-table title="Lista de Docentes" :loading="loading" :rows-per-page-options="[0]" :columns="docenteColumnsColumns" :rows="docentes" flat bordered dense :filter="docenteFiltar">
+          <q-table title="Lista de Docentes" :loading="loading" :rows-per-page-options="[0]" :columns="docenteColumns" :rows="docentes" flat bordered dense :filter="docenteFiltar">
             <template v-slot:header-cell="props">
               <q-th :props="props" class="bg-primary text-white text-center">
                 {{ props.col.label }}
