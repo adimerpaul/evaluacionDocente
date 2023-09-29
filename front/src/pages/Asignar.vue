@@ -2,7 +2,7 @@
     <q-page class="q-pa-xs">
       <div class="row">
         <div class="col-12">
-          <q-table title="Lista Asignacion" :loading="loading" :rows-per-page-options="[0]" :columns="asignarColumns" :rows="asignas" flat bordered dense :filter="asignaFiltar">
+          <q-table title="Lista Asignacion" :loading="loading" :rows-per-page-options="[0]" :columns="asignaColumns" :rows="docentematerias" flat bordered dense :filter="asignaFiltar">
             <template v-slot:header-cell="props">
               <q-th :props="props" class="bg-primary text-white text-center">
                 {{ props.col.label }}
@@ -10,7 +10,7 @@
             </template>
             <template v-slot:top-right>
               <q-btn label="Asignar" color="primary" no-caps icon="add_circle_outline" @click="asignaCreate" dense />
-              <q-btn flat round icon="refresh" @click="asignaGet" dense />
+              <q-btn flat round icon="refresh" @click="asignaciones" dense />
               <q-input outlined dense v-model="asignaFiltar" label="Buscar" class="q-ml-md" clearable>
                 <template v-slot:append>
                   <q-icon name="search" />
@@ -44,15 +44,34 @@
           <q-card-section>
             <q-form @submit.prevent="asignaSubmit" ref="myForm">
               <div class="row">
-                <div class="col-12 col-md-12">
-                  <q-select  outlined dense v-model="materia" label="Materias"  required :options="materias"  />
+                <div class="col-md-6 col-xs-12 q-pa-xs">
+                  <q-select  outlined dense v-model="materia" label="Materias"   :options="materias" use-input input-debounce="0" @filter="filterMat"  >
+                    <template v-slot:no-option>
+                      <q-item>
+                        <q-item-section class="text-grey">
+                          No results
+                        </q-item-section>
+                      </q-item>
+                    </template>
+                  </q-select>
                 </div>
-                <div class="col-12 col-md-12">
-                  <q-input  outlined dense v-model="materia.name" label="Nombre" hint="" :rules="[val => val.length > 0 || 'El nombre es requerido']" />
+                <div class="col-md-6 col-xs-12  q-pa-xs">
+                  <q-select  outlined dense v-model="docente" label="Docentes"   :options="docentes" use-input input-debounce="0" @filter="filterDoc"  >
+                    <template v-slot:no-option>
+                      <q-item>
+                        <q-item-section class="text-grey">
+                          No results
+                        </q-item-section>
+                      </q-item>
+                    </template>
+                  </q-select>
                 </div>
-                <div class="col-12 col-md-12">
-                    <q-input  outlined dense v-model="materia.sigla" label="Sigla" hint="" :rules="[val => val.length > 0 || 'El nombre es requerido']" />
-                  </div>
+                <div class="col-md-6 col-xs-12  q-pa-xs">
+                  <q-input dense outlined v-model="asigna.paralelo" label="Paralelo" required/>
+                </div>
+                <div class="col-md-6 col-xs-12  q-pa-xs">
+                  <q-input dense outlined v-model="asigna.gestion" label="Gestion" required :rules="[val => val>1900 && val<9999 || 'ingrese gestion valida']"/>
+                </div>
                 <div class="col-12 col-md-12 text-center q-pt-xs">
                   <q-btn :loading="loading" color="primary" label="Guardar" type="submit" no-caps icon="save" class="full-width"  />
                 </div>
@@ -68,7 +87,7 @@ import { globalStore } from '../stores/globalStore'
 import moment from 'moment'
 
 export default {
-  name: 'materiaPage',
+  name: 'asignarPage',
   data () {
     return {
       store: globalStore(),
@@ -80,14 +99,19 @@ export default {
       asignas: [],
       asigna: {},
       materias: [],
+      materia: { label: '' },
+      docente: { label: '' },
       filterMateria: [],
       docentes: [],
       filterDocente: [],
       asignaFiltar: '',
+      docentematerias: [],
       asignaColumns: [
         { name: 'opcion', label: 'Opcion', field: 'opcion', align: 'left', sortable: false },
-        { name: 'name', label: 'Nombre', field: 'name', align: 'left', sortable: true },
-        { name: 'sigla', label: 'Sigla', field: 'sigla', align: 'left', sortable: true }
+        { name: 'docente', label: 'DOCENTE', field: row => row.docente.name, align: 'left', sortable: true },
+        { name: 'materia', label: 'MATERIA', field: row => row.materia.name, align: 'left', sortable: true },
+        { name: 'paralelo', label: 'PARALELO', field: 'paralelo', align: 'left', sortable: true },
+        { name: 'gestion', label: 'GESTION', field: 'gestion', align: 'left', sortable: true }
       ]
     }
   },
@@ -95,12 +119,17 @@ export default {
     // this.validar()
     this.materiasGet()
     this.docenteGet()
+    this.asignaciones()
   },
   methods: {
-    materiaEdit (materia) {
-      this.materiaStatus = 'edit'
-      this.materiaShow = true
-      this.materia = materia
+    asignaEdit (asg) {
+      this.asignaStatus = 'edit'
+      this.asignaShow = true
+      this.asigna = asg
+      this.docente = asg.docente
+      this.docente.label = this.docente.name
+      this.materia = asg.materia
+      this.materia.label = this.materia.name
     },
     materiaDelete (asigna) {
       this.$q.dialog({
@@ -142,33 +171,73 @@ export default {
         materia_id: null,
         docente_id: null
       }
-      this.materiaShow = true
+      this.asignaShow = true
     },
-    materiaSubmit () {
+    asignaSubmit () {
+      if (this.docente.id === undefined) {
+        return false
+      }
+      if (this.materia.id === undefined) {
+        return false
+      }
       this.$q.loading.show()
-      if (this.materiaStatus === 'create') {
-        this.$api.post('materia', this.materia).then(() => {
-          this.materiasGet()
-          this.materiaShow = false
+      this.asigna.docente_id = this.docente.id
+      this.asigna.materia_id = this.materia.id
+      if (this.asignaStatus === 'create') {
+        this.$api.post('docentemateria', this.asigna).then(() => {
+          this.asignaciones()
+          this.asignaShow = false
         }).finally(() => {
           this.$q.loading.hide()
         })
       } else {
-        this.$api.put('materia/' + this.materia.id, this.materia).then((res) => {
+        this.$api.put('docentemateria/' + this.asigna.id, this.asigna).then((res) => {
           console.log(res.data)
-          this.materiasGet()
-          this.materiaShow = false
+          this.asignaciones()
+          this.asignaShow = false
         }).finally(() => {
           this.$q.loading.hide()
         })
       }
+    },
+    filterMat (val, update) {
+      if (val === '') {
+        update(() => {
+          this.materias = this.filterMateria
+
+          // here you have access to "ref" which
+          // is the Vue reference of the QSelect
+        })
+        return
+      }
+
+      update(() => {
+        const needle = val.toLowerCase()
+        this.materias = this.filterMateria.filter(v => v.label.toLowerCase().indexOf(needle) > -1)
+      })
+    },
+    filterDoc (val, update) {
+      if (val === '') {
+        update(() => {
+          this.docentes = this.filterDocente
+
+          // here you have access to "ref" which
+          // is the Vue reference of the QSelect
+        })
+        return
+      }
+
+      update(() => {
+        const needle = val.toLowerCase()
+        this.docentes = this.filterDocente.filter(v => v.label.toLowerCase().indexOf(needle) > -1)
+      })
     },
     materiasGet () {
       this.materias = []
       this.loading = true
       this.$api.get('materia').then((response) => {
         response.data.forEach(r => {
-          r.label = r.name
+          r.label = r.name + ' : ' + r.sigla
           this.materias.push(r)
         })
         this.filterMateria = this.materias
@@ -185,6 +254,14 @@ export default {
           this.docentes.push(r)
         })
         this.filterDocente = this.docentes
+      }).finally(() => {
+        this.loading = false
+      })
+    },
+    asignaciones () {
+      this.loading = true
+      this.$api.get('docentemateria').then((response) => {
+        this.docentematerias = response.data
       }).finally(() => {
         this.loading = false
       })

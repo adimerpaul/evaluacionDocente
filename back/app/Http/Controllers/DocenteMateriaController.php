@@ -64,8 +64,29 @@ class DocenteMateriaController extends Controller
     public function update(UpdatedocenteMateriaRequest $request, docenteMateria $docenteMateria)
     {
         //
+        $docenteMateria=DocenteMateria::find($request->id);
+        $docenteMateria->docente_id=$request->docente_id;
+        $docenteMateria->materia_id=$request->materia_id;
+        $docenteMateria->paralelo=$request->paralelo;
+        $docenteMateria->gestion=$request->gestion;
+        $docenteMateria->save();
     }
 
+
+    public function agregarCodigo(Request $request){
+        $docenteMateria=DocenteMateria::find($request->id);
+        $docenteMateria->codigo=$request->codigo;
+        $docenteMateria->save();
+
+    }
+
+    public function cambiarEstado(Request $request){
+        $docenteMateria=DocenteMateria::find($request->id);
+        if($docenteMateria->estado)
+        $docenteMateria->codigo=$request->codigo;
+        $docenteMateria->save();
+
+    }
     /**
      * Remove the specified resource from storage.
      */

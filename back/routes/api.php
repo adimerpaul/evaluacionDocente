@@ -33,6 +33,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     Route::resource('/docente', App\Http\Controllers\DocenteController::class);
     Route::resource('/materia', App\Http\Controllers\MateriaController::class);
+    Route::resource('/docentemateria', App\Http\Controllers\DocenteMateriaController::class);
 
 
 });

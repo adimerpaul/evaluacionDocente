@@ -36,7 +36,7 @@
       <q-expansion-item dense exact expand-separator icon="people" label="Usuarios" to="/user" expand-icon="null" v-if="store.booluser"/>
       <q-expansion-item dense exact expand-separator icon="school" label="Docentes" to="/docente" expand-icon="null" v-if="store.booldoc"/>
       <q-expansion-item dense exact expand-separator icon="class" label="Materias" to="/materia" expand-icon="null" v-if="store.boolmat"/>
-      <q-expansion-item dense exact expand-separator icon="history_edu" label="Asignacion" to="/asignacion" expand-icon="null" v-if="store.boolasig"/>
+      <q-expansion-item dense exact expand-separator icon="history_edu" label="Asignacion" to="/asignar" expand-icon="null" v-if="store.boolasig"/>
       <q-expansion-item dense exact expand-separator icon="analytics" label="Estadistico" to="/estadistico" expand-icon="null" v-if="store.boolest"/>
       <q-expansion-item dense exact expand-separator icon="print" label="Impresion" to="/asignacion" expand-icon="null" v-if="store.boolimp"/>
       <q-expansion-item dense exact expand-separator icon="logout" label="Salir " @click="logout" expand-icon="null" v-if="store.isLoggedIn"/>
