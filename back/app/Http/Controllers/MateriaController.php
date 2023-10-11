@@ -52,6 +52,7 @@ class MateriaController extends Controller
         //
     }
 
+
     /**
      * Update the specified resource in storage.
      */

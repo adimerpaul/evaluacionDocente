@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\docenteMateria;
 use App\Http\Requests\StoredocenteMateriaRequest;
 use App\Http\Requests\UpdatedocenteMateriaRequest;
+use Illuminate\Http\Request;
 
 class DocenteMateriaController extends Controller
 {
@@ -73,17 +74,19 @@ class DocenteMateriaController extends Controller
     }
 
 
-    public function agregarCodigo(Request $request){
+    public function cambioCodigo(Request $request){
         $docenteMateria=DocenteMateria::find($request->id);
         $docenteMateria->codigo=$request->codigo;
         $docenteMateria->save();
 
     }
 
-    public function cambiarEstado(Request $request){
+    public function cambioEstado(Request $request){
         $docenteMateria=DocenteMateria::find($request->id);
-        if($docenteMateria->estado)
-        $docenteMateria->codigo=$request->codigo;
+        if($docenteMateria->activo=='ACTIVO')
+            $docenteMateria->activo='INACTIVO';
+        else
+            $docenteMateria->activo='ACTIVO';
         $docenteMateria->save();
 
     }

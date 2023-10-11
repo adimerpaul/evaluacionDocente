@@ -22,6 +22,9 @@
                 <q-btn-dropdown round dense color="primary" dropdown-icon="more_vert" label="Acciones" no-caps>
                   <q-list>
                     <q-item clickable v-close-popup>
+                      <q-item-section @click="codigo(props.row)">Codigo</q-item-section>
+                    </q-item>
+                    <q-item clickable v-close-popup>
                       <q-item-section @click="asignaEdit(props.row)">Editar</q-item-section>
                     </q-item>
                     <q-item clickable v-close-popup>
@@ -29,6 +32,11 @@
                     </q-item>
                   </q-list>
                 </q-btn-dropdown>
+              </q-td>
+            </template>
+            <template v-slot:body-cell-estado="props">
+              <q-td :props="props" auto-width>
+                  <q-badge :color="props.row.activo=='ACTIVO'?'green':'red'"  :label="props.row.activo" @click="cambio(props.row)" />
               </q-td>
             </template>
           </q-table>
@@ -111,7 +119,9 @@ export default {
         { name: 'docente', label: 'DOCENTE', field: row => row.docente.name, align: 'left', sortable: true },
         { name: 'materia', label: 'MATERIA', field: row => row.materia.name, align: 'left', sortable: true },
         { name: 'paralelo', label: 'PARALELO', field: 'paralelo', align: 'left', sortable: true },
-        { name: 'gestion', label: 'GESTION', field: 'gestion', align: 'left', sortable: true }
+        { name: 'gestion', label: 'GESTION', field: 'gestion', align: 'left', sortable: true },
+        { name: 'codigo', label: 'CODIGO', field: 'codigo', align: 'left', sortable: true },
+        { name: 'estado', label: 'ESTADO', field: 'activo', align: 'left', sortable: true }
       ]
     }
   },
@@ -122,6 +132,48 @@ export default {
     this.asignaciones()
   },
   methods: {
+    cambio (evaluacion) {
+      this.$api.post('cambioEstado', evaluacion).then(() => {
+        this.$q.notify({
+          color: 'green-4',
+          textColor: 'white',
+          icon: 'cloud_done',
+          position: 'top',
+          message: 'Cambio Estado'
+        })
+        this.asignaciones()
+      })
+    },
+    codigo (evaluacion) {
+      const dato = evaluacion
+      this.$q.dialog({
+        title: 'CODIGO EVALUACION',
+        message: 'Ingrese el Codigo',
+        prompt: {
+          model: '',
+          type: 'text' // optional
+        },
+        cancel: true,
+        persistent: false
+      }).onOk(data => {
+        dato.codigo = data
+        this.$api.post('cambioCodigo', dato).then(() => {
+          this.$q.notify({
+            color: 'green-4',
+            textColor: 'white',
+            icon: 'cloud_done',
+            position: 'top',
+            message: 'Cambio Codigo'
+          })
+        })
+
+        // console.log('>>>> OK, received', data)
+      }).onCancel(() => {
+        // console.log('>>>> Cancel')
+      }).onDismiss(() => {
+        // console.log('I am triggered on both OK and Cancel')
+      })
+    },
     asignaEdit (asg) {
       this.asignaStatus = 'edit'
       this.asignaShow = true
