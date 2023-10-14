@@ -75,10 +75,23 @@ class DocenteMateriaController extends Controller
 
 
     public function cambioCodigo(Request $request){
-        $docenteMateria=DocenteMateria::find($request->id);
-        $docenteMateria->codigo=$request->codigo;
-        $docenteMateria->save();
+        $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'; // Caracteres permitidos
+        $codigo = '';
 
+        for ($i = 0; $i < 4; $i++) {
+            $codigo .= $characters[rand(0, strlen($characters) - 1)];
+        }
+
+        $docenteMateria = DocenteMateria::find($request->id);
+        $docenteMateria->codigo = $codigo;
+        $docenteMateria->activo = 'ACTIVO';
+        $docenteMateria->save();
+    }
+    public function bajaEvaluacion(Request $request){
+        $docenteMateria=DocenteMateria::find($request->id);
+        $docenteMateria->codigo='';
+        $docenteMateria->activo='INACTIVO';
+        $docenteMateria->save();
     }
 
     public function cambioEstado(Request $request){

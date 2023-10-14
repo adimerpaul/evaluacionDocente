@@ -21,8 +21,11 @@
               <q-td :props="props" auto-width>
                 <q-btn-dropdown round dense color="primary" dropdown-icon="more_vert" label="Acciones" no-caps>
                   <q-list>
-                    <q-item clickable v-close-popup>
-                      <q-item-section @click="codigo(props.row)">Codigo</q-item-section>
+                    <q-item clickable v-close-popup v-if="props.row.activo=='INACTIVO'">
+                      <q-item-section @click="codigo(props.row)">Generar Codigo</q-item-section>
+                    </q-item>
+                    <q-item clickable v-close-popup v-else>
+                      <q-item-section @click="baja(props.row)">Dar de Baja</q-item-section>
                     </q-item>
                     <q-item clickable v-close-popup>
                       <q-item-section @click="asignaEdit(props.row)">Editar</q-item-section>
@@ -116,12 +119,12 @@ export default {
       docentematerias: [],
       asignaColumns: [
         { name: 'opcion', label: 'Opcion', field: 'opcion', align: 'left', sortable: false },
+        { name: 'codigo', label: 'Codigo', field: 'codigo', align: 'left', sortable: true },
+        { name: 'paralelo', label: 'Par', field: 'paralelo', align: 'left', sortable: true },
+        { name: 'gestion', label: 'Gestion', field: 'gestion', align: 'left', sortable: true },
+        { name: 'estado', label: 'Estado', field: 'activo', align: 'left', sortable: true },
         { name: 'docente', label: 'DOCENTE', field: row => row.docente.name, align: 'left', sortable: true },
-        { name: 'materia', label: 'MATERIA', field: row => row.materia.name, align: 'left', sortable: true },
-        { name: 'paralelo', label: 'PARALELO', field: 'paralelo', align: 'left', sortable: true },
-        { name: 'gestion', label: 'GESTION', field: 'gestion', align: 'left', sortable: true },
-        { name: 'codigo', label: 'CODIGO', field: 'codigo', align: 'left', sortable: true },
-        { name: 'estado', label: 'ESTADO', field: 'activo', align: 'left', sortable: true }
+        { name: 'materia', label: 'MATERIA', field: row => row.materia.name, align: 'left', sortable: true }
       ]
     }
   },
@@ -148,16 +151,17 @@ export default {
       const dato = evaluacion
       this.$q.dialog({
         title: 'CODIGO EVALUACION',
-        message: 'Ingrese el Codigo',
-        prompt: {
-          model: '',
-          type: 'text' // optional
-        },
+        message: 'Se generara un nuevo codigo para la evaluacion',
+        // prompt: {
+        //   model: '',
+        //   type: 'text' // optional
+        // },
         cancel: true,
         persistent: false
       }).onOk(data => {
         dato.codigo = data
         this.$api.post('cambioCodigo', dato).then(() => {
+          this.asignaciones()
           this.$q.notify({
             color: 'green-4',
             textColor: 'white',
@@ -172,6 +176,39 @@ export default {
         // console.log('>>>> Cancel')
       }).onDismiss(() => {
         // console.log('I am triggered on both OK and Cancel')
+      })
+    },
+    baja (evaluacion) {
+      this.$q.dialog({
+        title: 'Dar de Baja',
+        message: '¿Estas seguro de dar de baja esta evaluacion?',
+        cancel: true,
+        persistent: true
+      }).onOk(() => {
+        this.loading = true
+        this.$api.post('bajaEvaluacion', {
+          id: evaluacion.id
+        })
+          .then(() => {
+            this.asignaciones()
+            this.$q.notify({
+              color: 'green-4',
+              textColor: 'white',
+              icon: 'cloud_done',
+              position: 'top',
+              message: 'Evaluacion dada de baja correctamente'
+            })
+          })
+          .catch(err => {
+            this.loading = false
+            this.$q.notify({
+              color: 'red-4',
+              textColor: 'white',
+              icon: 'cloud_done',
+              position: 'top',
+              message: err.response.data.message
+            })
+          })
       })
     },
     asignaEdit (asg) {

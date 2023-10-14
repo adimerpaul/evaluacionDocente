@@ -4,7 +4,7 @@
       <q-toolbar>
         <q-toolbar-title>
           <q-avatar>
-            <img src="uto.png" />
+            <img src="/uto.png" />
           </q-avatar>
         </q-toolbar-title>
         <div>
