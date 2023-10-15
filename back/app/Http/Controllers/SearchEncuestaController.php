@@ -24,6 +24,9 @@ class SearchEncuestaController extends Controller{
         $conocimientos = Pregunta::
             with(['uso.conocimiento','respuestas'])
             ->get();
+        $conocimientos->each(function ($conocimiento){
+            $conocimiento->textRespuesta = '';
+        });
         return response()->json([
             'asignacion' => $asignacion,
             'conocimientos' => $conocimientos,

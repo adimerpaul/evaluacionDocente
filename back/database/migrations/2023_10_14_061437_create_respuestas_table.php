@@ -13,10 +13,13 @@ return new class extends Migration
     {
         Schema::create('respuestas', function (Blueprint $table) {
             $table->id();
-            $table->string('respuesta');
-            $table->string('comentario')->nullable();
             $table->unsignedBigInteger('docente_materia_id');
             $table->foreign('docente_materia_id')->references('id')->on('docente_materia');
+            $table->unsignedBigInteger('pregunta_id');
+            $table->foreign('pregunta_id')->references('id')->on('preguntas');
+            $table->unsignedBigInteger('formulario_id');
+            $table->foreign('formulario_id')->references('id')->on('formularios');
+            $table->string('respuesta')->nullable();
             $table->timestamps();
         });
     }

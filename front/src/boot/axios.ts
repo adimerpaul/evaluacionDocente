@@ -16,6 +16,9 @@ declare module '@vue/runtime-core' {
 // "export default () => {}" function below (which runs individually
 // for each client)
 const api = axios.create({ baseURL: import.meta.env.VITE_API_BACK })
+const csrfToken = 'csrfToken'
+
+api.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken
 const url = import.meta.env.VITE_API_BACK
 const store = useCounterStore()
 export default boot(({ app, router }) => {

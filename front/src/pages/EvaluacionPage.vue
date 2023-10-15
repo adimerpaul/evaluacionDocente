@@ -1,6 +1,6 @@
 <template>
   <q-page class="items-center bg-grey-3 q-pa-md">
-    <q-card flat bordered class="bg-grey-4" >
+    <q-card flat bordered class="bg-grey-4">
       <q-card-section class="q-pa-xs">
         <q-item clickable v-ripple dense>
           <q-item-section avatar>
@@ -16,7 +16,7 @@
               <br>
               <span class="text-weight-bold">Sigla: </span>
               {{store.asignacion.materia.sigla}}-
-              {{store.asignacion.materia.paralelo}}
+              {{store.asignacion.paralelo}}
               <br>
               <span class="text-weight-bold">Gestion: </span>{{store.asignacion.gestion}}
             </q-item-label>
@@ -24,45 +24,72 @@
         </q-item>
       </q-card-section>
     </q-card>
-    <template v-for="conocimiento in store.conocimientos" :key="conocimiento.id">
-      <q-card class="q-ma-md" flat bordered>
-        <q-card-section class="q-pa-xs text-center bg-black text-white">
+    <div class="q-py-xs">
+      <q-linear-progress rounded size="25px" :value="num/store.conocimientos.length" color="orange" track-color="grey-3">
+        <div class="absolute-full flex flex-center">
+          <q-badge color="white" text-color="accent" :label="num" />
+        </div>
+      </q-linear-progress>
+    </div>
+    <div class="text-bold text-center text-subtitle1">
+      {{num}}/{{store.conocimientos.length}}
+    </div>
+    <template v-for="(conocimiento,index) in store.conocimientos" :key="conocimiento.id">
+      <q-card class="q-mb-md" flat bordered v-if="index+1==num" style="height: 450px;">
+        <q-card-section class="q-pa-xs text-center bg-black text-white text-h4">
           {{conocimiento.name}}
         </q-card-section>
         <q-card-section>
-          <q-btn class="full-width q-ma-xs" rounded no-caps outline
+          <q-btn class="full-width q-ma-xs" rounded no-caps :outline="!(conocimiento.textRespuesta==respuesta.name)"
                  v-for="(respuesta, i) in conocimiento.respuestas" :key="respuesta.id"
                  :color="i==0?'green':i==1?'orange':i==2?'red':'blue'"
+                 @click="responder(respuesta, conocimiento)"
           >
-            <div class="text-black">{{respuesta.name}}</div>
+            <div class="text-black text-h5 text-bold">{{respuesta.name}}</div>
           </q-btn>
         </q-card-section>
       </q-card>
     </template>
-    <pre>{{store.conocimientos}}</pre>
-    <div class="text-center q-pa-md">
-      <q-card flat bordered>
-        <q-card-section class="bg-primary">
-          <q-btn color="white" size="18px" text-color="primary" push
-                 label="Realizar Evaluacion" no no-caps icon-right="login"
-                 @click="realizarEvaluacion" :loading="loading"
-          />
-        </q-card-section>
-      </q-card>
+    <div class="row justify-center q-mt-md">
+      <q-btn label="Anterior" color="primary" @click="num--" v-if="num>1" no-caps icon="arrow_back" />
+      <q-space />
+      <q-btn label="Siguiente" color="primary" @click="num++" v-if="num<store.conocimientos.length" no-caps icon-right="arrow_forward" />
     </div>
+    <div class="q-pa-md">
+<!--      v-if="num==store.conocimientos.length"-->
+      <q-btn label="Enviar" v-if="num==store.conocimientos.length" color="green" @click="enviar" icon-right="send" class="full-width" />
+    </div>
+    <q-dialog v-model="dialog">
+      <q-card>
+        <q-card-section>
+          <div class="text-h6">¿Está seguro de enviar la evaluación?</div>
+        </q-card-section>
+        <q-card-section>
+          <q-select label="Carrera" v-model="carrera" :options="['INGENIERÍA DE SISTEMAS','INGENIERÍA INFORMÁTICA']" outlined dense />
+          <q-select label="Mención" v-model="mension" :options="['DESARROLLO DE SOFTWARE','TELEMATICA','DIRECCIÓN Y GESTIÓN DE SISTEMAS EMPRESARIALES','GESTIÓN DE LA INFORMACIÓN','MODELAMIENTO Y OPTIMIZACIÓN DE RECURSOS-PROCESOS']" outlined dense />
+        </q-card-section>
+        <q-card-actions align="right">
+          <q-btn label="Cancelar" color="red" v-close-popup />
+          <q-btn label="Aceptar" color="green" @click="enviarFomulario" />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+<!--    <pre>{{store.conocimientos}}</pre>-->
   </q-page>
 </template>
 
 <script lang="ts">
 import { defineComponent, onMounted, ref } from 'vue'
-import { useQuasar } from 'quasar'
-import { api, Alert, store, url } from 'boot/axios'
+import { store, url, api, Alert } from 'boot/axios'
 import { useRouter } from 'vue-router'
 export default defineComponent({
   name: 'EvaluacionPage',
   setup: function () {
-    const $q = useQuasar()
     const loading = ref(false)
+    const dialog = ref(false)
+    const carrera = ref('')
+    const mension = ref('')
+    const num = ref(1)
     const router = useRouter()
     onMounted(() => {
       // console.log(store.asignacion === {})
@@ -70,32 +97,40 @@ export default defineComponent({
         router.push('/')
       }
     })
-    const realizarEvaluacion = () => {
-      $q.dialog({
-        title: 'Realizar Evaluacion',
-        message: 'Ingrese su codigo de evaluacion',
-        prompt: {
-          model: '',
-          type: 'text',
-          maxlength: 5,
-          outlined: true
-        },
-        cancel: true,
-        persistent: true
-      }).onOk((data) => {
-        loading.value = true
-        api.post('search', { search: data }).then((res) => {
-          store.conocimientos = res.data.conocimientos
-          store.asignacion = res.data.asignacion
-          router.push('/evaluacion')
-        }).catch((err) => {
-          Alert.error(err.response.data.message)
-        }).finally(() => {
-          loading.value = false
-        })
+    const responder = (respuesta: any, conocimiento: any) => {
+      // console.log(respuesta.name)
+      conocimiento.textRespuesta = respuesta.name
+      if (num.value < store.conocimientos.length) {
+        num.value++
+      }
+    }
+    const enviar = () => {
+      // console.log(store.conocimientos)
+      dialog.value = true
+    }
+    const enviarFomulario = () => {
+      if (carrera.value === '') {
+        Alert.error('Debe seleccionar una carrera')
+        return
+      }
+      if (mension.value === '') {
+        Alert.error('Debe seleccionar una mención')
+        return
+      }
+      api.post('formularios', {
+        carrera: carrera.value,
+        mension: mension.value,
+        respuestas: store.conocimientos,
+        asignacion: store.asignacion
+      }).then((response: any) => {
+        console.log(response.data)
+        Alert.success('Muchas gracias por su evaluación')
+        router.push('/')
+      }).catch((error: any) => {
+        console.log(error)
       })
     }
-    return { realizarEvaluacion, loading, store, url }
+    return { responder, enviar, enviarFomulario, loading, store, url, num, dialog, carrera, mension }
   }
 })
 </script>

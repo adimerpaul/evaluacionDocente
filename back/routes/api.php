@@ -38,6 +38,18 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('/bajaEvaluacion',[\App\Http\Controllers\DocenteMateriaController::class,'bajaEvaluacion']);
     Route::post('/cambioEstado',[\App\Http\Controllers\DocenteMateriaController::class,'cambioEstado']);
 
-
-
 });
+
+//Route::group(['middleware' => ['web']], function () {
+    Route::resource('/formularios', App\Http\Controllers\FormularioController::class);
+    Route::get('/test', function () {
+        $ipconfigInfo = exec("ipconfig /all");
+        $macAddress = preg_match('/\w\w:\w\w:\w\w:\w\w:\w\w:\w\w/', $ipconfigInfo, $matches);
+        if ($macAddress) {
+            $macAddress = $matches[0];
+            echo "Dirección MAC: $macAddress";
+        } else {
+            echo "No se pudo encontrar la dirección MAC.";
+        }
+    });
+//});
