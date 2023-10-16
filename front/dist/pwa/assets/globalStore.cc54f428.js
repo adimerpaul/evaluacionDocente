@@ -1,0 +1,1 @@
+import{d as o}from"./index.3c804d13.js";const l=o("global",{state:()=>({counter:0,user:{},eventNumber:0,isLoggedIn:!!localStorage.getItem("tokenEnc"),booluser:!1,booldoc:!1,boolmat:!1,boolasig:!1,boolest:!1,boolimp:!1}),getters:{doubleCount:e=>e.counter*2},actions:{increment(){this.counter++}}});export{l as g};

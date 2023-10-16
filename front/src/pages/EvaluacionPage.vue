@@ -69,8 +69,8 @@
           <q-select label="Mención" v-model="mension" :options="['DESARROLLO DE SOFTWARE','TELEMATICA','DIRECCIÓN Y GESTIÓN DE SISTEMAS EMPRESARIALES','GESTIÓN DE LA INFORMACIÓN','MODELAMIENTO Y OPTIMIZACIÓN DE RECURSOS-PROCESOS']" outlined dense />
         </q-card-section>
         <q-card-actions align="right">
-          <q-btn label="Cancelar" color="red" v-close-popup />
-          <q-btn label="Aceptar" color="green" @click="enviarFomulario" />
+          <q-btn :loading="loading" label="Cancelar" color="red" v-close-popup />
+          <q-btn :loading="loading" label="Aceptar" color="green" @click="enviarFomulario" />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -117,6 +117,7 @@ export default defineComponent({
         Alert.error('Debe seleccionar una mención')
         return
       }
+      loading.value = true
       api.post('formularios', {
         carrera: carrera.value,
         mension: mension.value,
@@ -128,6 +129,9 @@ export default defineComponent({
         router.push('/')
       }).catch((error: any) => {
         console.log(error)
+      }).finally(() => {
+        loading.value = false
+        dialog.value = false
       })
     }
     return { responder, enviar, enviarFomulario, loading, store, url, num, dialog, carrera, mension }

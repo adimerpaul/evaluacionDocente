@@ -10,7 +10,7 @@
             </template>
             <template v-slot:top-right>
               <q-btn label="Asignar" color="primary" no-caps icon="add_circle_outline" @click="asignaCreate" dense />
-              <q-btn flat round icon="refresh" @click="asignaciones" dense />
+              <q-btn round icon="refresh" @click="asignaciones" dense :loading="refresh" />
               <q-input outlined dense v-model="asignaFiltar" label="Buscar" class="q-ml-md" clearable>
                 <template v-slot:append>
                   <q-icon name="search" />
@@ -19,6 +19,7 @@
             </template>
             <template v-slot:body-cell-opcion="props">
               <q-td :props="props" auto-width>
+                ({{props.row.cantidad}})
                 <q-btn-dropdown round dense color="primary" dropdown-icon="more_vert" label="Acciones" no-caps>
                   <q-list>
                     <q-item clickable v-close-popup v-if="props.row.activo=='INACTIVO'">

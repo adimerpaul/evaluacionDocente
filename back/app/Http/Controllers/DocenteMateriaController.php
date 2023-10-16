@@ -15,7 +15,12 @@ class DocenteMateriaController extends Controller
     public function index()
     {
         //
-        return DocenteMateria::with('docente')->with('materia')->get();
+        $docenteMaterias= DocenteMateria::with('docente')->with('materia')->get();
+        $docenteMaterias->each(function($docenteMateria){
+            $cantidad=$docenteMateria->formularios->count();
+            $docenteMateria->cantidad=$cantidad;
+        });
+        return $docenteMaterias;
     }
 
     /**

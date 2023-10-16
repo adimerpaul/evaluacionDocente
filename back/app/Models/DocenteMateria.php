@@ -23,4 +23,7 @@ class DocenteMateria extends Model
     public function materia(){
         return $this->belongsTo(Materia::class);
     }
+    public function formularios(){
+        return $this->hasMany(Formulario::class);
+    }
 }
