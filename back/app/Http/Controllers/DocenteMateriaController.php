@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\docenteMateria;
+use App\Models\DocenteMateria;
 use App\Http\Requests\StoredocenteMateriaRequest;
 use App\Http\Requests\UpdatedocenteMateriaRequest;
 use Illuminate\Http\Request;
