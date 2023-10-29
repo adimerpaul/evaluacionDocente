@@ -12,6 +12,7 @@ class Respuesta extends Model
         'docente_materia_id',
         'pregunta_id',
         'formulario_id',
-        'respuesta'
+        'respuesta',
+        'valor'
     ];
 }

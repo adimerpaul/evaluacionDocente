@@ -20,6 +20,7 @@ return new class extends Migration
             $table->unsignedBigInteger('formulario_id');
             $table->foreign('formulario_id')->references('id')->on('formularios');
             $table->string('respuesta')->nullable();
+            $table->integer('valor')->default(0);
             $table->timestamps();
         });
     }

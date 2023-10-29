@@ -45,6 +45,7 @@ class FormularioController extends Controller
                 'pregunta_id' => $respuesta['id'],
                 'docente_materia_id' => $request->asignacion['id'],
                 'respuesta' => $respuesta['textRespuesta'],
+                'valor' => $respuesta['valorRespuesta'],
             ]);
         }
 

@@ -100,6 +100,7 @@ export default defineComponent({
     const responder = (respuesta: any, conocimiento: any) => {
       // console.log(respuesta.name)
       conocimiento.textRespuesta = respuesta.name
+      conocimiento.valorRespuesta = respuesta.valor
       if (num.value < store.conocimientos.length) {
         num.value++
       }

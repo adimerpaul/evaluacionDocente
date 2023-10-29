@@ -32,6 +32,43 @@ class RespuestaController extends Controller
         //
     }
 
+
+    public function resumenDocente(){
+        return DB::SELECT("SELECT
+            (select r.valor from respuestas r where r.formulario_id=r1.formulario_id and r.pregunta_id=1) p1,
+            (select r.valor from respuestas r where r.formulario_id=r1.formulario_id and r.pregunta_id=2) p2,
+            (select r.valor from respuestas r where r.formulario_id=r1.formulario_id and r.pregunta_id=3) p3,
+            (select r.valor from respuestas r where r.formulario_id=r1.formulario_id and r.pregunta_id=4) p4,
+            (select r.valor from respuestas r where r.formulario_id=r1.formulario_id and r.pregunta_id=5) p5,
+            (select r.valor from respuestas r where r.formulario_id=r1.formulario_id and r.pregunta_id=6) p6,
+            (select r.valor from respuestas r where r.formulario_id=r1.formulario_id and r.pregunta_id=7) p7,
+            (select r.valor from respuestas r where r.formulario_id=r1.formulario_id and r.pregunta_id=8) p8,
+            (select r.valor from respuestas r where r.formulario_id=r1.formulario_id and r.pregunta_id=9) p9,
+            (select r.valor from respuestas r where r.formulario_id=r1.formulario_id and r.pregunta_id=10) p10,
+            (select r.valor from respuestas r where r.formulario_id=r1.formulario_id and r.pregunta_id=11) p11,
+            (select r.valor from respuestas r where r.formulario_id=r1.formulario_id and r.pregunta_id=12) p12,
+            (select r.valor from respuestas r where r.formulario_id=r1.formulario_id and r.pregunta_id=13) p13,
+            (select r.valor from respuestas r where r.formulario_id=r1.formulario_id and r.pregunta_id=14) p14,
+            (select r.valor from respuestas r where r.formulario_id=r1.formulario_id and r.pregunta_id=15) p15,
+            (select r.valor from respuestas r where r.formulario_id=r1.formulario_id and r.pregunta_id=16) p16,
+            (select r.valor from respuestas r where r.formulario_id=r1.formulario_id and r.pregunta_id=17) p17,
+            (select r.valor from respuestas r where r.formulario_id=r1.formulario_id and r.pregunta_id=18) p18,
+            (select r.valor from respuestas r where r.formulario_id=r1.formulario_id and r.pregunta_id=19) p19,
+            (select r.valor from respuestas r where r.formulario_id=r1.formulario_id and r.pregunta_id=20) p20,
+            (select r.valor from respuestas r where r.formulario_id=r1.formulario_id and r.pregunta_id=21) p21,
+            (select r.valor from respuestas r where r.formulario_id=r1.formulario_id and r.pregunta_id=22) p22,
+            (select r.valor from respuestas r where r.formulario_id=r1.formulario_id and r.pregunta_id=23) p23,
+            (select r.valor from respuestas r where r.formulario_id=r1.formulario_id and r.pregunta_id=24) p24,
+            (select r.valor from respuestas r where r.formulario_id=r1.formulario_id and r.pregunta_id=25) p25,
+            (select r.valor from respuestas r where r.formulario_id=r1.formulario_id and r.pregunta_id=26) p26,
+            (select r.valor from respuestas r where r.formulario_id=r1.formulario_id and r.pregunta_id=27) p27,
+            (select r.valor from respuestas r where r.formulario_id=r1.formulario_id and r.pregunta_id=28) p28,
+            (select r.valor from respuestas r where r.formulario_id=r1.formulario_id and r.pregunta_id=29) p29,
+            (select r.valor from respuestas r where r.formulario_id=r1.formulario_id and r.pregunta_id=30) p30,
+            (select r.valor from respuestas r where r.formulario_id=r1.formulario_id and r.pregunta_id=31) p31
+            from respuestas r1 where r1.docente_materia_id=1;
+        ");
+    }
     /**
      * Display the specified resource.
      */
